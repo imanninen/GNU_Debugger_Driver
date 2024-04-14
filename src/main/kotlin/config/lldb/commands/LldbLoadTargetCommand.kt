@@ -14,7 +14,7 @@ class LldbLoadTargetCommand(
     override fun handle(input: BufferedReader): String {
         var outputOfCommand = ""
         input.skip(ciCommand.length.toLong() + "(lldb) ".length.toLong())
-        var line: String = input.readLine()
+        val line: String = input.readLine()
         outputOfCommand += line
         return outputOfCommand
     }
