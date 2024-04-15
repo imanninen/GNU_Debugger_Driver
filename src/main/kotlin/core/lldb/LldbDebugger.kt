@@ -2,6 +2,7 @@ package org.gnudebugger.core.lldb
 
 import org.gnudebugger.config.core.DebugCommand
 import org.gnudebugger.config.core.DebuggerConfiguration
+import org.gnudebugger.config.core.commands.ContinueCommand
 import org.gnudebugger.config.lldb.LldbDebugCommand
 import org.gnudebugger.config.lldb.LldbDebuggerConfiguration
 import org.gnudebugger.core.Debugger
@@ -16,11 +17,20 @@ internal class LldbDebugger(
     override val configuration: LldbDebuggerConfiguration
 ) : Debugger {
 
-    override fun resume(): DebuggerConfiguration.HandlerReturn {
+    override fun resume(
+        command: ContinueCommand,
+        input: BufferedReader,
+        output: OutputStream
+    ): DebuggerConfiguration.HandlerReturn {
+        executeInHandlerDebugCommand(command, input, output)
         return DebuggerConfiguration.HandlerReturn.RESUME
     }
 
-    override fun executeInHandlerDebugCommand(command: DebugCommand, input: BufferedReader, output: OutputStream): String {
+    override fun executeInHandlerDebugCommand(
+        command: DebugCommand,
+        input: BufferedReader,
+        output: OutputStream
+    ): String {
         output.write(command.ciCommand.toByteArray())
         output.flush()
         return (command as LldbDebugCommand).handle(input)
@@ -39,11 +49,8 @@ internal class LldbDebugger(
                 lldbProcess.outputStream.flush()
                 (command as LldbDebugCommand).handle(input)
             }
-            configuration.breakPointsHandlers.forEach {(command, block) ->
+            configuration.breakPointsHandlers.forEach { block ->
                 block(input, lldbProcess.outputStream)
-                lldbProcess.outputStream.write(command.ciCommand.toByteArray())
-                lldbProcess.outputStream.flush()
-                (command as LldbDebugCommand).handle(input)
             }
         } catch (e: IOException) {
             e.printStackTrace()

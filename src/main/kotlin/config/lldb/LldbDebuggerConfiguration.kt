@@ -10,8 +10,8 @@ import java.io.OutputStream
 class LldbDebuggerConfiguration : DebuggerConfiguration {
     override val config: MutableList<DebugCommand> = mutableListOf()
     override var targetIsSet = false
-    override var breakPointsHandlers: MutableMap<DebugCommand, (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn> =
-        mutableMapOf()
+    override var breakPointsHandlers: MutableList<(BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn> =
+        mutableListOf()
     var breakpointsNumber: Int = 0
 
     override fun addConfiguration(configuration: DebugCommand) {
@@ -22,8 +22,8 @@ class LldbDebuggerConfiguration : DebuggerConfiguration {
         config.add(configuration)
     }
 
-    override fun setBreakPointHandler(entry: Map.Entry<DebugCommand, (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn>) {
-        breakPointsHandlers[entry.key] = entry.value
+    override fun setBreakPointHandler(block: (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn) {
+        breakPointsHandlers.add(block)
     }
 
 }

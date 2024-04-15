@@ -27,8 +27,8 @@ class DebuggerDriver(
         )
     }
 
-    fun resume(): DebuggerConfiguration.HandlerReturn {
-        return debugger.resume()
+    fun resume(input: BufferedReader, output: OutputStream): DebuggerConfiguration.HandlerReturn {
+        return debugger.resume(CommandFactory.createContinueCommand(debugger), input, output)
     }
 
     fun getBackTrace(input:BufferedReader, output: OutputStream): String {
@@ -36,10 +36,7 @@ class DebuggerDriver(
     }
 
     fun setBreakPointHandler(block: (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn) {
-        debugger.configuration.setBreakPointHandler(SimpleEntry(
-            CommandFactory.createContinueCommand(debugger),
-            block
-        ))
+        debugger.configuration.setBreakPointHandler(block)
     }
 
     fun run(programArgs: List<String> = emptyList()) {
