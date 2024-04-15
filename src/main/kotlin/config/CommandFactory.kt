@@ -1,13 +1,7 @@
 package org.gnudebugger.config
 
-import org.gnudebugger.config.core.commands.BreakPointCommand
-import org.gnudebugger.config.core.commands.ContinueCommand
-import org.gnudebugger.config.core.commands.LoadTargetCommand
-import org.gnudebugger.config.core.commands.RunCommand
-import org.gnudebugger.config.lldb.commands.LldbBreakPointCommand
-import org.gnudebugger.config.lldb.commands.LldbContinueCommand
-import org.gnudebugger.config.lldb.commands.LldbLoadTargetCommand
-import org.gnudebugger.config.lldb.commands.LldbRunCommand
+import org.gnudebugger.config.core.commands.*
+import org.gnudebugger.config.lldb.commands.*
 import org.gnudebugger.core.Debugger
 import org.gnudebugger.core.lldb.LldbDebugger
 import java.io.File
@@ -34,6 +28,10 @@ class CommandFactory {
 
         private fun createLldbContinueCommand(): LldbContinueCommand {
             return LldbContinueCommand()
+        }
+
+        private fun createLldbBackTraceCommand(): LldbBackTraceCommand {
+            return LldbBackTraceCommand()
         }
 
         fun createLoadTargetCommand(debugger: Debugger, path: String): LoadTargetCommand {
@@ -73,5 +71,15 @@ class CommandFactory {
 
             }
         }
+        fun createBackTraceCommand(debugger: Debugger): BackTraceCommand {
+            return when (debugger) {
+                is LldbDebugger -> createLldbBackTraceCommand()
+                else -> {
+                    throw IllegalStateException("Unknown debugger was provided!")
+                }
+
+            }
+        }
+
     }
 }

@@ -8,11 +8,12 @@ fun main() {
     debuggerDriver.loadDebugExecutable("debugee/target")
     debuggerDriver.setBreakPoint("main.c", 5)
     debuggerDriver.setBreakPoint("main.c", 12)
-    debuggerDriver.setBreakPointHandler {input ->
+    debuggerDriver.setBreakPointHandler {input, output ->
         gg = input.toString()
+        println(debuggerDriver.getBackTrace(input, output))
         debuggerDriver.resume()
     }
-    debuggerDriver.setBreakPointHandler { input ->
+    debuggerDriver.setBreakPointHandler { input, output ->
         debuggerDriver.resume()
     }
     debuggerDriver.run(listOf("abovba"))

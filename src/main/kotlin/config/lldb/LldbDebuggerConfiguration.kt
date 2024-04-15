@@ -5,11 +5,12 @@ import org.gnudebugger.config.core.DebuggerConfiguration
 import org.gnudebugger.config.lldb.commands.LldbBreakPointCommand
 import org.gnudebugger.config.lldb.commands.LldbLoadTargetCommand
 import java.io.BufferedReader
+import java.io.OutputStream
 
 class LldbDebuggerConfiguration : DebuggerConfiguration {
     override val config: MutableList<DebugCommand> = mutableListOf()
     override var targetIsSet = false
-    override var breakPointsHandlers: MutableMap<DebugCommand, (BufferedReader) -> DebuggerConfiguration.HandlerReturn> =
+    override var breakPointsHandlers: MutableMap<DebugCommand, (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn> =
         mutableMapOf()
     var breakpointsNumber: Int = 0
 
@@ -21,7 +22,7 @@ class LldbDebuggerConfiguration : DebuggerConfiguration {
         config.add(configuration)
     }
 
-    override fun setBreakPointHandler(entry: Map.Entry<DebugCommand, (BufferedReader) -> DebuggerConfiguration.HandlerReturn>) {
+    override fun setBreakPointHandler(entry: Map.Entry<DebugCommand, (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn>) {
         breakPointsHandlers[entry.key] = entry.value
     }
 
