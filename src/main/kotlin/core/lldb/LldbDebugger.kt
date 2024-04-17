@@ -5,6 +5,8 @@ import org.gnudebugger.config.core.DebuggerConfiguration
 import org.gnudebugger.config.core.commands.ContinueCommand
 import org.gnudebugger.config.lldb.LldbDebugCommand
 import org.gnudebugger.config.lldb.LldbDebuggerConfiguration
+import org.gnudebugger.config.lldb.responce.ErrorCommandResponse
+import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import org.gnudebugger.core.Debugger
 import java.io.BufferedReader
 import java.io.File
@@ -31,9 +33,13 @@ internal class LldbDebugger(
         input: BufferedReader,
         output: OutputStream
     ): String {
-        output.write(command.ciCommand.toByteArray())
+        output.write(command.clCommand.toByteArray())
         output.flush()
-        return (command as LldbDebugCommand).handle(input)
+        return when (val response = (command as LldbDebugCommand).handle(input)) {
+            is SuccessCommandResponse -> response.output
+            is ErrorCommandResponse -> throw IllegalStateException(response.errorMessage)
+            else -> throw IllegalStateException("Unknown response format: ${response.javaClass}")
+        }
     }
 
     override fun run() {
@@ -45,15 +51,20 @@ internal class LldbDebugger(
             val lldbProcess = pb.start()
             val input = BufferedReader(InputStreamReader(lldbProcess.inputStream))
             for (command in configuration.config) {
-                lldbProcess.outputStream.write(command.ciCommand.toByteArray())
+                lldbProcess.outputStream.write(command.clCommand.toByteArray())
                 lldbProcess.outputStream.flush()
-                (command as LldbDebugCommand).handle(input)
+                val response = (command as LldbDebugCommand).handle(input)
+                when (response) {
+                    is ErrorCommandResponse -> throw IllegalStateException(response.errorMessage)
+                }
             }
             configuration.breakPointsHandlers.forEach { block ->
                 block(input, lldbProcess.outputStream)
             }
         } catch (e: IOException) {
             e.printStackTrace()
+        } catch (e: IllegalStateException) {
+            println(e.message)
         }
     }
 }

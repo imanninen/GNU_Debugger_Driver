@@ -6,7 +6,7 @@ import org.gnudebugger.core.Debugger
 import org.gnudebugger.core.lldb.LldbDebugger
 import java.io.File
 
-class CommandFactory {
+internal class CommandFactory {
     companion object {
         private fun createLldbLoadTargetCommand(path: String): LldbLoadTargetCommand {
             val pathToTarget = File(path)
@@ -21,9 +21,7 @@ class CommandFactory {
         }
 
         private fun createLldbBreakPointCommand(line: Int, fileName: String): LldbBreakPointCommand {
-            return LldbBreakPointCommand( // TODO bad construction!
-                 fileName, line
-            )
+            return LldbBreakPointCommand(fileName, line)
         }
 
         private fun createLldbContinueCommand(): LldbContinueCommand {

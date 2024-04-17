@@ -1,5 +1,5 @@
 package org.gnudebugger.config.core
 
 interface DebugCommand {
-    val ciCommand: String
+    val clCommand: String
 }

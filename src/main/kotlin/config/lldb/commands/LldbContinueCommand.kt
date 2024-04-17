@@ -2,13 +2,15 @@ package org.gnudebugger.config.lldb.commands
 
 import org.gnudebugger.config.core.commands.ContinueCommand
 import org.gnudebugger.config.lldb.LldbDebugCommand
+import org.gnudebugger.config.lldb.responce.CommandResponse
+import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import java.io.BufferedReader
 
 class LldbContinueCommand : ContinueCommand, LldbDebugCommand {
-    override val ciCommand: String = "c\n"
-    override fun handle(input: BufferedReader): String {
+    override val clCommand: String = "c\n"
+    override fun handle(input: BufferedReader): CommandResponse {
         var outputOfCommand = ""
-        input.skip(ciCommand.length.toLong() + "(lldb) ".length.toLong())
+        input.skip(clCommand.length.toLong() + "(lldb) ".length.toLong())
         var line: String = input.readLine()
         require (line.contains(Regex("Process [0-9]* resuming"))) {"unexpected output: $line!"}
 
@@ -25,6 +27,6 @@ class LldbContinueCommand : ContinueCommand, LldbDebugCommand {
             outputOfCommand += "$line\n"
             line = input.readLine()
         }
-        return outputOfCommand
+        return SuccessCommandResponse(outputOfCommand)
     }
 }

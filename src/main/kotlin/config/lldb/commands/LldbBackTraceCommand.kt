@@ -2,12 +2,14 @@ package org.gnudebugger.config.lldb.commands
 
 import org.gnudebugger.config.core.commands.BackTraceCommand
 import org.gnudebugger.config.lldb.LldbDebugCommand
+import org.gnudebugger.config.lldb.responce.CommandResponse
+import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import java.io.BufferedReader
 
 class LldbBackTraceCommand : BackTraceCommand, LldbDebugCommand {
-    override fun handle(input: BufferedReader): String {
+    override fun handle(input: BufferedReader): CommandResponse {
         var outputOfCommand = ""
-        input.skip(ciCommand.length.toLong() + "(lldb) ".length.toLong())
+        input.skip(clCommand.length.toLong() + "(lldb) ".length.toLong())
         var line: String = input.readLine()
         line = input.readLine()
         while (line != "") {
@@ -22,9 +24,9 @@ class LldbBackTraceCommand : BackTraceCommand, LldbDebugCommand {
             outputOfCommand += "$line\n"
             line = input.readLine()
         }
-        return outputOfCommand
+        return SuccessCommandResponse(outputOfCommand)
     }
 
-    override val ciCommand: String
+    override val clCommand: String
         get() = "bt\n"
 }
