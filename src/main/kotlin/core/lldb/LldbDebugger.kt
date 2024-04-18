@@ -53,6 +53,10 @@ internal class LldbDebugger(
             for (command in configuration.config) {
                 lldbProcess.outputStream.write(command.clCommand.toByteArray())
                 lldbProcess.outputStream.flush()
+                val availableErrorStreamBytes = lldbProcess.errorStream.available()
+                if (availableErrorStreamBytes != 0) {
+                    throw IllegalStateException(lldbProcess.errorStream.bufferedReader().readLine())
+                }
                 val response = (command as LldbDebugCommand).handle(input)
                 when (response) {
                     is ErrorCommandResponse -> throw IllegalStateException(response.errorMessage)
