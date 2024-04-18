@@ -32,6 +32,10 @@ internal class CommandFactory {
             return LldbBackTraceCommand()
         }
 
+        private fun createLldbPrintVarCommand(varName: String): LldbPrintVarCommand {
+            return LldbPrintVarCommand(varName)
+        }
+
         fun createLoadTargetCommand(debugger: Debugger, path: String): LoadTargetCommand {
             return when (debugger) {
                 is LldbDebugger -> createLldbLoadTargetCommand(path)
@@ -75,7 +79,12 @@ internal class CommandFactory {
                 else -> {
                     throw IllegalStateException("Unknown debugger was provided!")
                 }
-
+            }
+        }
+        fun createPrintVarCommand(debugger: Debugger, varName: String) : PrintVarCommand {
+            return when (debugger) {
+                is LldbDebugger -> createLldbPrintVarCommand(varName)
+                else -> {throw IllegalStateException("Unknown debugger was provided!")}
             }
         }
 

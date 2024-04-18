@@ -7,6 +7,7 @@ import org.gnudebugger.core.DebuggerFactory
 import java.io.BufferedReader
 import java.io.File
 import java.io.OutputStream
+import java.nio.Buffer
 
 class DebuggerDriver(
     pathToDebuggerExecutable: String
@@ -30,8 +31,16 @@ class DebuggerDriver(
         return debugger.resume(CommandFactory.createContinueCommand(debugger), input, output)
     }
 
-    fun getBackTrace(input:BufferedReader, output: OutputStream): String {
+    fun getBackTrace(input: BufferedReader, output: OutputStream): String {
         return debugger.executeInHandlerDebugCommand(CommandFactory.createBackTraceCommand(debugger), input, output)
+    }
+
+    fun getVarValueByName(varName: String, input: BufferedReader, output: OutputStream): String {
+        return debugger.executeInHandlerDebugCommand(
+            CommandFactory.createPrintVarCommand(debugger, varName),
+            input,
+            output
+        )
     }
 
     fun setBreakPointHandler(block: (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn) {
