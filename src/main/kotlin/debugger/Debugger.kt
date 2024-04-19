@@ -3,6 +3,7 @@ package org.gnudebugger.debugger
 import org.gnudebugger.config.core.DebugCommand
 import org.gnudebugger.config.core.DebuggerConfiguration
 import org.gnudebugger.config.core.commands.ContinueCommand
+import org.gnudebugger.config.lldb.responce.CommandResponse
 import java.io.BufferedReader
 import java.io.OutputStream
 
@@ -17,8 +18,9 @@ interface Debugger {
 
     /**
      * Method, which executes configured debugger.
+     * @return [CommandResponse] to know status of execution.
      */
-    fun run()
+    fun run(): CommandResponse
 
     /**
      * Method, which used to handle [ContinueCommand]
