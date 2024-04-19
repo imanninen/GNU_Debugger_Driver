@@ -1,6 +1,5 @@
 # Debugger Driver
 ## Solution
-***
 ### Main approach:
 First of all, I come up to use lldb debugger because I have macOS on `m1` processor. 
 (Unfortunately gdb is not support `m1` macs).
@@ -28,7 +27,6 @@ I wrote simple Unit tests to help me write code. See [tests](src/test/kotlin).
 - Have an idea how to create runtime interface and implement `step` function to go forward whe debugging.
 
 ## How to use a Debug driver:
-***
 If you want to use `lldb` GNU debugger, you must compile your program using `clang` or `gcc` with `-g` option. 
 For now, it only supports C. First of all you have to create instance of `DebugDriver` class, which is basic 
 class for sheath around GNU debugger. You can do it like this: 
