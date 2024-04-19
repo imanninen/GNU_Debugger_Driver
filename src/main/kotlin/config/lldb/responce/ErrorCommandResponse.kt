@@ -1,6 +1,6 @@
 package org.gnudebugger.config.lldb.responce
 
-class ErrorCommandResponse(
+internal class ErrorCommandResponse(
     val errorMessage: String
 ) : CommandResponse {
 }

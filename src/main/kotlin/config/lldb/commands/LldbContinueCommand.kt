@@ -6,7 +6,7 @@ import org.gnudebugger.config.lldb.responce.CommandResponse
 import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import java.io.BufferedReader
 
-class LldbContinueCommand : ContinueCommand, LldbDebugCommand {
+internal class LldbContinueCommand : ContinueCommand, LldbDebugCommand {
     override val clCommand: String = "c\n"
     override fun handle(input: BufferedReader): CommandResponse {
         var outputOfCommand = ""

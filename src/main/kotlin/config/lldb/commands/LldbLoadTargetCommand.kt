@@ -7,7 +7,7 @@ import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import java.io.BufferedReader
 import java.io.File
 
-class LldbLoadTargetCommand(
+internal class LldbLoadTargetCommand(
     override val pathToTarget: File
 ) : LoadTargetCommand, LldbDebugCommand {
     override val clCommand: String

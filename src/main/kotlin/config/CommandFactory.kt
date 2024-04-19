@@ -6,6 +6,9 @@ import org.gnudebugger.core.Debugger
 import org.gnudebugger.core.lldb.LldbDebugger
 import java.io.File
 
+/**
+ * This class is used to create a specific command depending on the debugger.
+ */
 internal class CommandFactory {
     companion object {
         private fun createLldbLoadTargetCommand(path: String): LldbLoadTargetCommand {

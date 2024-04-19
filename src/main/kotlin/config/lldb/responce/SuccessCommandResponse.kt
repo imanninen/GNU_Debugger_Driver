@@ -1,5 +1,5 @@
 package org.gnudebugger.config.lldb.responce
 
-class SuccessCommandResponse(
+internal class SuccessCommandResponse(
     val output: String
 ) : CommandResponse

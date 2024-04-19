@@ -6,12 +6,15 @@ import org.gnudebugger.config.lldb.responce.CommandResponse
 import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import java.io.BufferedReader
 
-class LldbBackTraceCommand : BackTraceCommand, LldbDebugCommand {
+/**
+ * Lldb stack trace debug command implementation.
+ */
+internal class LldbBackTraceCommand : BackTraceCommand, LldbDebugCommand {
     override fun handle(input: BufferedReader): CommandResponse {
         var outputOfCommand = ""
         input.skip(clCommand.length.toLong() + "(lldb) ".length.toLong())
         var line: String = input.readLine()
-        line = input.readLine()
+        line = input.readLine().trimIndent()
         while (line != "") {
             if (line.contains("(lldb)")) {
                 line = input.readLine()
@@ -21,10 +24,13 @@ class LldbBackTraceCommand : BackTraceCommand, LldbDebugCommand {
                 outputOfCommand += "$line\n"
                 break
             }
+            if (line.startsWith("* ")){
+                line = line.replace("* ", "")
+            }
             outputOfCommand += "$line\n"
-            line = input.readLine()
+            line = input.readLine().trimIndent()
         }
-        return SuccessCommandResponse(outputOfCommand)
+        return SuccessCommandResponse(outputOfCommand.trimIndent())
     }
 
     override val clCommand: String

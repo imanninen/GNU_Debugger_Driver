@@ -6,7 +6,7 @@ import org.gnudebugger.config.lldb.responce.CommandResponse
 import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import java.io.BufferedReader
 
-class LldbRunCommand(programArgsToStr: String) : RunCommand, LldbDebugCommand {
+internal class LldbRunCommand(programArgsToStr: String) : RunCommand, LldbDebugCommand {
     override val clCommand: String = "run $programArgsToStr\n"
     override fun handle(input: BufferedReader): CommandResponse {
         var outputOfCommand = ""

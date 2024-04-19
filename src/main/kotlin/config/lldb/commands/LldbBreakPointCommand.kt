@@ -6,7 +6,7 @@ import org.gnudebugger.config.lldb.responce.CommandResponse
 import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
 import java.io.BufferedReader
 
-class LldbBreakPointCommand(
+internal class LldbBreakPointCommand(
     override val file: String,
     override val line: Int) :
     BreakPointCommand, LldbDebugCommand {

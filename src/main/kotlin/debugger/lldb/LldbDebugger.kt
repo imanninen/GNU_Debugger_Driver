@@ -14,6 +14,11 @@ import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStream
 
+/**
+ * This is an implementation of [Debugger] interface and a lldb debugger.
+ * @property executable file, that is provided as executable of lldb debugger
+ * @property configuration configurations([DebuggerConfiguration]) before execution.
+ */
 internal class LldbDebugger(
     private val executable: File,
     override val configuration: LldbDebuggerConfiguration
@@ -43,8 +48,9 @@ internal class LldbDebugger(
     }
 
     override fun run() {
-        require(configuration.targetIsSet)
+        require(configuration.targetIsSet) {"Target wasn't specified!"}
         require(configuration.breakpointsNumber == configuration.breakPointsHandlers.size)
+            {"number of breakpoints don't match to breakpoints handlers!"}
         val pb = ProcessBuilder(executable.path)
         pb.redirectErrorStream(true)
         try {
@@ -68,6 +74,8 @@ internal class LldbDebugger(
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: IllegalStateException) {
+            println(e.message)
+        } catch (e: IllegalArgumentException) {
             println(e.message)
         }
     }
