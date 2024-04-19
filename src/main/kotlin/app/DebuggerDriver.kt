@@ -85,6 +85,7 @@ class DebuggerDriver(
      * input with type [BufferedReader] and output with type [OutputStream].
      * You shouldn't touch them, otherwise correctness of working is not guaranteed.
      * This [block] should end with colling [DebuggerDriver.resume] method.
+     * @sample [Sample.importantFunction]
      */
     fun setBreakPointHandler(block: (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn) {
         debugger.configuration.setBreakPointHandler(block)
