@@ -1,13 +1,14 @@
-package org.gnudebugger.core.lldb
+package org.gnudebugger.debugger.lldb
 
 import org.gnudebugger.config.core.DebugCommand
 import org.gnudebugger.config.core.DebuggerConfiguration
 import org.gnudebugger.config.core.commands.ContinueCommand
 import org.gnudebugger.config.lldb.LldbDebugCommand
 import org.gnudebugger.config.lldb.LldbDebuggerConfiguration
+import org.gnudebugger.config.lldb.responce.CommandResponse
 import org.gnudebugger.config.lldb.responce.ErrorCommandResponse
 import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
-import org.gnudebugger.core.Debugger
+import org.gnudebugger.debugger.Debugger
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -47,7 +48,7 @@ internal class LldbDebugger(
         }
     }
 
-    override fun run() {
+    override fun run(): CommandResponse {
         require(configuration.targetIsSet) {"Target wasn't specified!"}
         require(configuration.breakpointsNumber == configuration.breakPointsHandlers.size)
             {"number of breakpoints don't match to breakpoints handlers!"}
@@ -71,12 +72,13 @@ internal class LldbDebugger(
             configuration.breakPointsHandlers.forEach { block ->
                 block(input, lldbProcess.outputStream)
             }
+            return SuccessCommandResponse("Success execution!")
         } catch (e: IOException) {
-            e.printStackTrace()
+            return ErrorCommandResponse(e.message ?: "Unexpected error!")
         } catch (e: IllegalStateException) {
-            println(e.message)
+            return ErrorCommandResponse(e.message ?: "Unexpected error!")
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            return ErrorCommandResponse(e.message ?: "Unexpected error!")
         }
     }
 }

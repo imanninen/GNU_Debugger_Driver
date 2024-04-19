@@ -2,8 +2,8 @@ package org.gnudebugger.config
 
 import org.gnudebugger.config.core.commands.*
 import org.gnudebugger.config.lldb.commands.*
-import org.gnudebugger.core.Debugger
-import org.gnudebugger.core.lldb.LldbDebugger
+import org.gnudebugger.debugger.Debugger
+import org.gnudebugger.debugger.lldb.LldbDebugger
 import java.io.File
 
 /**

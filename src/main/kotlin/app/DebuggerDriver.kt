@@ -2,8 +2,9 @@ package org.gnudebugger.app
 
 import org.gnudebugger.config.CommandFactory
 import org.gnudebugger.config.core.DebuggerConfiguration
-import org.gnudebugger.core.Debugger
-import org.gnudebugger.core.DebuggerFactory
+import org.gnudebugger.config.lldb.responce.CommandResponse
+import org.gnudebugger.debugger.Debugger
+import org.gnudebugger.debugger.DebuggerFactory
 import java.io.BufferedReader
 import java.io.File
 import java.io.OutputStream
@@ -26,7 +27,7 @@ class DebuggerDriver(
      */
     fun loadDebugExecutable(pathToFile: String) {
         val debugTarget = File(pathToFile)
-        require(debugTarget.exists() && debugTarget.isFile) { "Invalid file was given!" }
+        require(debugTarget.exists() && debugTarget.isFile && debugTarget.canExecute()) { "Invalid file was given!" }
         debugger.configuration.addConfiguration(
             CommandFactory.createLoadTargetCommand(debugger, pathToFile)
         )
@@ -85,6 +86,7 @@ class DebuggerDriver(
      * input with type [BufferedReader] and output with type [OutputStream].
      * You shouldn't touch them, otherwise correctness of working is not guaranteed.
      * This [block] should end with colling [DebuggerDriver.resume] method.
+     * @sample [Samplee.importantFunction]
      */
     fun setBreakPointHandler(block: (BufferedReader, OutputStream) -> DebuggerConfiguration.HandlerReturn) {
         debugger.configuration.setBreakPointHandler(block)
@@ -93,12 +95,13 @@ class DebuggerDriver(
     /**
      * Method that start executing all configurations and breakpoint handlers.
      * @param programArgs arguments to pass them to target executable as program arguments
-     * @throws IllegalArgumentException - if number of breakpoints and breakpoint handlers are not equal
+     * @return [CommandResponse] to know status of execution.
+     * @throws IllegalArgumentException if number of breakpoints and breakpoint handlers are not equal
      */
-    fun run(programArgs: List<String> = emptyList()) {
+    fun run(programArgs: List<String> = emptyList()): CommandResponse {
         debugger.configuration.addConfiguration(
             CommandFactory.createRunCommand(debugger, programArgs)
         )
-        debugger.run()
+        return debugger.run()
     }
 }
