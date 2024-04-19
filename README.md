@@ -8,6 +8,7 @@ class for sheath around GNU debugger. You can do it like this:
 ```kotlin
 val debuggerDriver = DebugDriver("/usr/bin/lldb")
 ```
+## Debug driver as library:
 Also, you may use `DebugDriver` as a library in your project. Here is a .jar [file](/build/libs/GNU_Debugger_Driver-1.0-SNAPSHOT.jar).
 
 ## Set target
