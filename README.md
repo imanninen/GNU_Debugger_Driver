@@ -1,5 +1,6 @@
 # Debugger Driver
 ## Solution
+***
 ### Main approach:
 First of all, I come up to use lldb debugger because I have macOS on `m1` processor. 
 (Unfortunately gdb is not support `m1` macs).
@@ -22,11 +23,12 @@ implementation `LldbDebugger`
 
 ### Tests:  
 I wrote simple Unit tests to help me write code. See [tests](src/test/kotlin).
-## Plans:
+### Plans:
 - If I have enough time, I want to support a gdb for linux x86.
 - Have an idea how to create runtime interface and implement `step` function to go forward whe debugging.
 
 ## How to use a Debug driver:
+***
 If you want to use `lldb` GNU debugger, you must compile your program using `clang` or `gcc` with `-g` option. 
 For now, it only supports C. First of all you have to create instance of `DebugDriver` class, which is basic 
 class for sheath around GNU debugger. You can do it like this: 
@@ -37,14 +39,14 @@ val debuggerDriver = DebugDriver("/usr/bin/lldb")
 Also, you may use `DebugDriver` as a library in your project. 
 Here is a [.jar file](/build/libs/GNU_Debugger_Driver-1.0-SNAPSHOT.jar).
 
-## Set target
+### Set target
 To use my driver, you have to compile your code and provide executable file using function `loadDebugExecutable`.
 It accepts a path as `String` and supports an absolute path or path relative to current directory.
 #### Example:
 ```kotlin
 debuggerDriver.loadDebugExecutable("debugee/target")
 ```
-## Breakpoints
+### Breakpoints
 To set a breakpoint you should run `setBreakPoint` function, which accepts file name and line number where
 you want to place point.
 For each breakpoint, you should specify a breakpoint handler.
@@ -55,7 +57,7 @@ times.
 ```kotlin
 debuggerDriver.setBreakPoint("main.c", 5)
 ```
-## Breakpoint handler
+### Breakpoint handler
 My driver has `setBreakPointHandler` which accepts function with `BufferedReader` and `OutputStream` as arguments.
 They are needed to invoke some driver function in the scope. 
 I didn't create something smarter than this, because I don't know how to not pass input and output from the process,
@@ -63,7 +65,7 @@ which is not running at the moment. Also don't know how to hide these parameters
 So, how does my breakpoint handler work? In the scope of the described function, you should write what you want to happen on
 the break. But at the end you must invoke `driver.resume(input, output)` to finish handling point.
 
-### Commands that are used in breakpoint debugger scope:
+#### Commands that are used in breakpoint debugger scope:
 - `driver.getBackTrace(input, output)` - return stack trace string representation. You may use it haw you want.
 - `debugger.getVarValueByName("i", input, output)` - return a value in format `(type) value` or return 
 `ERROR` message.
@@ -75,6 +77,6 @@ debuggerDriver.setBreakPointHandler {input, output ->
     debuggerDriver.resume(input, output)
 }
 ```
-## Run
+### Run
 To run DebugDriver you should use `run()` method, which accepts a `List<String>` of program arguments.
 
