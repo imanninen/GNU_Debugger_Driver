@@ -2,8 +2,8 @@ package org.gnudebugger.app
 
 import org.gnudebugger.config.CommandFactory
 import org.gnudebugger.config.core.DebuggerConfiguration
-import org.gnudebugger.core.Debugger
-import org.gnudebugger.core.DebuggerFactory
+import org.gnudebugger.debugger.Debugger
+import org.gnudebugger.debugger.DebuggerFactory
 import java.io.BufferedReader
 import java.io.File
 import java.io.OutputStream

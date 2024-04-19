@@ -1,4 +1,4 @@
-package org.gnudebugger.core.lldb
+package org.gnudebugger.debugger.lldb
 
 import org.gnudebugger.config.core.DebugCommand
 import org.gnudebugger.config.core.DebuggerConfiguration
@@ -7,7 +7,7 @@ import org.gnudebugger.config.lldb.LldbDebugCommand
 import org.gnudebugger.config.lldb.LldbDebuggerConfiguration
 import org.gnudebugger.config.lldb.responce.ErrorCommandResponse
 import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
-import org.gnudebugger.core.Debugger
+import org.gnudebugger.debugger.Debugger
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException

@@ -1,5 +1,20 @@
 # Debugger Driver
 ## Solution
+### Main approach:
+First of all, I come up to use lldb debugger because I have macOS on `m1` processor. 
+(Unfortunately gdb is not support `m1` macs).
+Then I thought a lot about how I should run debugger from program and come up to build the process using 
+`ProcessBuilder`and then write commands to the input of the processor.
+Also, I decided that my application will not compile user code from the provided sources. 
+That is because of the primary goal of debugger it to debug and not compile, and also sometimes, compiling
+some code is not a trivial task. 
+(When a user uses some external libraries)
+
+I tried to support linux x86, but this attempt unfortunately failed.
+### Architecture:
+In the beginning, I tried to use 
+
+### Tests:  
 
 ## How to use a Debug driver:
 If you want to use `lldb` GNU debugger, you must compile your program using `clang` or `gcc` with `-g` option. 
@@ -37,12 +52,17 @@ which is not running at the moment. Also don't know how to hide these parameters
 So, how does my breakpoint handler work? In the scope of the described function, you should write what you want to happen on
 the break. But at the end you must invoke `driver.resume(input, output)` to finish handling point.
 
+### Commands that are used in breakpoint debugger scope:
+- `driver.getBackTrace(input, output)` - return stack trace string representation. You may use it haw you want.
+- `debugger.getVarValueByName("i", input, output)` - return a value in format `(type) value` or return 
+`ERROR` message.
 #### Example:
 ```kotlin
 debuggerDriver.setBreakPointHandler {input, output ->
-        println(debuggerDriver.getBackTrace(input, output))
-        debuggerDriver.resume(input, output)
-    }
+    println(debuggerDriver.getBackTrace(input, output))
+    println(debuggerDriver.getVarValueByName("i", input, output))
+    debuggerDriver.resume(input, output)
+}
 ```
 ## Run
 To run DebugDriver you should use `run()` method, which accepts a `List<String>` of program arguments.

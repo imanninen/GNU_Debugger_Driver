@@ -1,4 +1,4 @@
-package org.gnudebugger.core
+package org.gnudebugger.debugger
 
 import org.gnudebugger.config.core.DebugCommand
 import org.gnudebugger.config.core.DebuggerConfiguration
