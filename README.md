@@ -21,10 +21,13 @@ package.
 implementation `LldbDebugger`
 
 ### Tests:  
-I wrote simple Unit tests to help me write code. See [tests](src/test/kotlin).
+I wrote simple Unit tests to help me write code. 
+See [tests](src/test/kotlin).
+But not focus on testing too much
+because it is not a main goal of this project.
 ### Plans:
-- If I have enough time, I want to support a gdb for linux x86.
-- Have an idea how to create runtime interface and implement `step` function to go forward whe debugging.
+- If I have enough time, I want to support gdb for linux x86.
+- Have an idea how to create runtime interface and implement `step` function to go forward while debugging.
 
 ## How to use a Debug driver:
 If you want to use `lldb` GNU debugger, you must compile your program using `clang` or `gcc` with `-g` option. 
@@ -68,8 +71,12 @@ the break. But at the end you must invoke `driver.resume(input, output)` to fini
 - `debugger.getVarValueByName("i", input, output)` - return a value in format `(type) value` or return 
 `ERROR` message.
 #### Example:
+
 ```kotlin
-debuggerDriver.setBreakPointHandler {input, output ->
+import java.io.BufferedReader
+import java.io.OutputStream
+
+debuggerDriver.setBreakPointHandler { input: BufferedReader, output: OutputStream ->
     println(debuggerDriver.getBackTrace(input, output))
     println(debuggerDriver.getVarValueByName("i", input, output))
     debuggerDriver.resume(input, output)
