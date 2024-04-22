@@ -1,6 +1,9 @@
 import org.gnudebugger.app.DebuggerDriver
+import org.gnudebugger.config.core.DebugCommand
+import org.gnudebugger.config.lldb.LldbDebuggerConfiguration
 import org.gnudebugger.config.lldb.responce.ErrorCommandResponse
 import org.gnudebugger.config.lldb.responce.SuccessCommandResponse
+import org.gnudebugger.debugger.Debugger
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -15,6 +18,36 @@ class LLdbDebuggerTests {
         val debugger = DebuggerDriver("/usr/bin/lldb")
         assertThrows<IllegalArgumentException> { debugger.run() }
         assertThrows<IllegalArgumentException>("path should be a exists file!") { DebuggerDriver("/usr/bin") }
+    }
+
+    fun getPrivateConfig(debuggerDriver: DebuggerDriver): MutableList<DebugCommand> {
+        val debugger =
+            debuggerDriver::class.java.declaredFields.find { it.name == "debugger" }?.apply { isAccessible = true }
+                ?.get(debuggerDriver)
+                ?: error("Could not find debugger field!")
+        val configuration = (debugger as Debugger)::class.java.declaredFields.find { it.name == "configuration" }
+            ?.apply { isAccessible = true }
+            ?.get(debugger)
+            ?: error("Could not find configuration field!")
+        val config = (configuration as LldbDebuggerConfiguration)::class.java.declaredFields.find { it.name == "config" }
+            ?.apply { isAccessible = true }?.get(configuration) ?: error("Could not find config field!")
+        if ( config !is MutableList<*>)
+            throw IllegalStateException("Config has invalid type!")
+        return config as MutableList<DebugCommand>
+    }
+
+    @Test
+    fun testConfiguration() {
+        val debuggerDriver = DebuggerDriver("/usr/bin/lldb")
+
+        assertEquals(true, getPrivateConfig(debuggerDriver).isEmpty(), "Config should be empty!")
+        debuggerDriver.loadDebugExecutable("debugee/target")
+        debuggerDriver.setBreakPoint("main.c", 5)
+        debuggerDriver.setBreakPointHandler { input, outputStream ->
+            debuggerDriver.resume(input, outputStream)
+        }
+        val config = getPrivateConfig(debuggerDriver)
+        assertEquals(2, config.size)
     }
 
     @Test
@@ -61,7 +94,7 @@ class LLdbDebuggerTests {
     }
 
     @Test
-    fun backTraceTest() {
+    fun backTraceTest() { // only for mac
         val debugger = DebuggerDriver("/usr/bin/lldb")
         debugger.loadDebugExecutable("debugee/target")
         debugger.setBreakPoint("main.c", 5)
