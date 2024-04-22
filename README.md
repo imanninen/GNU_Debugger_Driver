@@ -1,7 +1,7 @@
 # Debugger Driver
 ## Solution
 ### Main approach:
-First of all, I come up to use lldb debugger because I have macOS on `m1` processor. 
+First of all, I come up to use `lldb` debugger because I have macOS on `m1` processor. 
 (Unfortunately gdb is not support `m1` macs).
 Then I thought a lot about how I should run debugger from program and come up to build the process using 
 `ProcessBuilder`and then write commands to the input of the processor.
