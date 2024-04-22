@@ -13,8 +13,6 @@ internal class CommandFactory {
     companion object {
         private fun createLldbLoadTargetCommand(path: String): LldbLoadTargetCommand {
             val pathToTarget = File(path)
-            require(pathToTarget.exists() && pathToTarget.isFile)
-            { "File doesn't exist! Path: $path" }// TODO("should check lang.)
             return LldbLoadTargetCommand(pathToTarget)
         }
 
@@ -59,6 +57,8 @@ internal class CommandFactory {
         }
 
         fun createBreakPointCommand(debugger: Debugger, line: Int, fileName: String): BreakPointCommand {
+            require(fileName.endsWith(".c") || fileName.endsWith(".C"))
+                {"Current version supports only .c files."}
             return when (debugger) {
                 is LldbDebugger -> createLldbBreakPointCommand(line, fileName)
                 else -> {

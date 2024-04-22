@@ -61,7 +61,7 @@ class LLdbDebuggerTests {
     }
 
     @Test
-    fun backTraceTest() {
+    fun backTraceTest() { // only for mac
         val debugger = DebuggerDriver("/usr/bin/lldb")
         debugger.loadDebugExecutable("debugee/target")
         debugger.setBreakPoint("main.c", 5)
