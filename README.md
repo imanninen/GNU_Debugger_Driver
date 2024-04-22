@@ -20,6 +20,9 @@ package.
 - The package `org.gnudebugger.debugger` contains abstract `Debugger` and its 
 implementation `LldbDebugger`
 
+This architecture helps to easily extend application. 
+For example, if I decide to add another debugger, I don't need to refactor a lot of code, just implement several classes
+
 ### Tests:  
 I wrote simple Unit tests to help me write code. 
 See [tests](src/test/kotlin).
