@@ -19,7 +19,7 @@ internal class LldbBreakPointCommand(
         if (line.contains(Regex("Breakpoint [0-9]*: no locations \\(pending\\)."))){
             var error: String = "${input.readLine()}\n".replace(Regex("WARNING"), "ERROR")
             error += "(incorrect file name or line)"
-            throw IllegalStateException(error) // TODO better branching
+            throw IllegalStateException(error)
         }
         outputOfCommand += line
         return SuccessCommandResponse(outputOfCommand)

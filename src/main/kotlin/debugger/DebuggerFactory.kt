@@ -20,8 +20,11 @@ internal class DebuggerFactory {
             val executableFile = File(pathToDebuggerExecutable)
             require(executableFile.exists() && executableFile.isFile && executableFile.canExecute())
             { "Invalid file was given!" }
-            // TODO change creation (check for debugger support!)
-            return LldbDebugger(executableFile, LldbDebuggerConfiguration())
+            return when {
+                pathToDebuggerExecutable.endsWith("lldb") ->
+                    LldbDebugger(executableFile, LldbDebuggerConfiguration())
+                else -> {throw IllegalStateException("Unknown debugger: $pathToDebuggerExecutable")}
+            }
         }
     }
 }
