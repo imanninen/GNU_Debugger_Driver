@@ -33,7 +33,7 @@ because it is not a main goal of this project.
 - Have an idea how to create runtime interface and implement `step` function to go forward while debugging.
 
 ## How to use a Debug driver:
-If you want to use `lldb` GNU debugger, you must compile your program using `clang` or `gcc` with `-g` option. 
+If you want to use `lldb` GNU debugger, you must compile your program using `clang` or `gcc` with `-g` option. Also I used `--std=c99` flag to specify `C` standard. 
 For now, it only supports C. First of all you have to create instance of `DebugDriver` class, which is basic 
 class for sheath around GNU debugger. You can do it like this: 
 ```kotlin
