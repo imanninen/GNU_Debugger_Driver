@@ -19,3 +19,6 @@ tasks.test {
 kotlin {
     jvmToolchain(17)
 }
+tasks.jar {
+    archiveFileName = "${project.name}.jar"
+}
