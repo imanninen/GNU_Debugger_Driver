@@ -10,7 +10,7 @@ That is because of the primary goal of debugger it to debug and not compile, and
 some code is not a trivial task. 
 (When a user uses some external libraries)
 
-I tried to support linux x86, but this attempt unfortunately failed.(But i don't gave up)
+I tried to support linux x86, but this attempt unfortunately failed. (But i don't gave up)
 ### Architecture:
 - The package `org.gnudebugger.app` contains API class, that are provided to user.
 - The package `org.gnudebugger.config.core` contains all abstract interfaces,
@@ -41,7 +41,7 @@ val debuggerDriver = DebugDriver("/usr/bin/lldb")
 ```
 ### Debug driver as library:
 Also, you may use `DebugDriver` as a library in your project. 
-Here is a [.jar file](/build/libs/GNU_Debugger_Driver-1.0-SNAPSHOT.jar).
+Here is a [.jar file](/build/libs/GNU_Debugger_Driver.jar).
 
 ### Set target
 To use my driver, you have to compile your code and provide executable file using function `loadDebugExecutable`.
